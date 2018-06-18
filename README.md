@@ -15,8 +15,11 @@ cd into the cloned folder
 
 Rename the following files(they are inside application/config folder) as follows:
 
+```sh
 database-sample.php file to database.php
+
 config-sample.php file to config.php
+```
 
 Edit the files to suit your environment setup and you're set to go!
 
