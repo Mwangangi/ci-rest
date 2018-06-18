@@ -32,7 +32,6 @@ This request will fetch all customer records
 GET http://ci-rest.test/api/customer
 ```
 
-e.g 
 This request will fetch all customer with customer_id 3
 ```sh
 GET http://ci-rest.test/api/customer/3
