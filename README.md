@@ -25,3 +25,34 @@ Edit the files to suit your environment setup and you're set to go!
 
 ### Usage
 As you like
+
+e.g 
+This request will fetch all customer records
+```sh
+GET http://ci-rest.test/api/customer
+```
+
+e.g 
+This request will fetch all customer with customer_id 3
+```sh
+GET http://ci-rest.test/api/customer/3
+```
+
+This request will create a new customer record
+```sh
+POST http://ci-rest.test/api/customer
+```
+
+This request will edit customer with customer_id 8 with new details 
+```sh
+PUT http://ci-rest.test/api/customer/8
+```
+
+This request will delete customer with customer_id 6
+```sh
+DELETE http://ci-rest.test/api/customer/6
+```
+
+## Note
+
+* All data interchange format is JSON.
