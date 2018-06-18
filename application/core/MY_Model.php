@@ -42,29 +42,11 @@ class MY_Model extends CI_Model
     protected $_primary_key = null;
 
     /**
-     * @var int id of active item_status
-     */
-    protected $active_id = null;
-
-    /**
-     * @var null/int primary key of database table
-     */
-    protected $deleted_id = null;
-
-    /**
      * Constructor of MY_Model class
      */
     public function __construct()
     {
         parent::__construct();
-        $this->active_id = $this->getItemStatusId([
-            'name' => 'active',
-            'reference_table' => 'none',
-        ]);
-        $this->deleted_id = $this->getItemStatusId([
-            'name' => 'deleted',
-            'reference_table' => 'none',
-        ]);
     }
 
     /**
@@ -81,11 +63,6 @@ class MY_Model extends CI_Model
     {
         $single_record = false;
         $data = null;
-
-        // Filter our deleted records
-        if (in_array('item_status_id', $this->_table_data) && $this->_table != 'item_status') {
-            $this->db->where('item_status_id !=', $this->deleted_id);
-        }
 
         if (is_numeric($where)) {
             $single_record = true;
@@ -223,11 +200,6 @@ class MY_Model extends CI_Model
             $primary_data['reference_number'] = $this->getRefNo();
         }
 
-        //set the active status_id for this record
-        if (in_array('item_status_id', $this->_table_data) && $this->_table != 'item_status') {
-            $primary_data['item_status_id'] = $this->active_id;
-        }
-
         $this->db->insert($this->_table, $primary_data);
         $insert_id = $this->db->insert_id();
 
@@ -270,11 +242,6 @@ class MY_Model extends CI_Model
         // set reference_number if field has one
         if (in_array('reference_number', $this->_table_data)) {
             $data['reference_number'] = $this->getRefNo();
-        }
-
-        //set the active status_id for this record
-        if (in_array('item_status_id', $this->_table_data) && $this->_table != 'item_status') {
-            $data['item_status_id'] = $this->active_id;
         }
 
         $this->db->insert($this->_table, $data);
@@ -334,14 +301,7 @@ class MY_Model extends CI_Model
             return false;
         }
 
-        //first check if item_status_id field is a field in table
-        if (in_array('item_status_id', $this->_table_data) && $this->_table != 'item_status') {
-            //update it to deleted
-            $new_data['item_status_id'] = $this->deleted_id;
-            $this->db->update($this->_table, $new_data);
-        } else {
-            $this->db->delete($this->_table);
-        }
+        $this->db->delete($this->_table);
 
         return ($this->db->affected_rows() > 0) ? true : false;
     }
@@ -407,18 +367,6 @@ class MY_Model extends CI_Model
 
         if ($query) {
             return $query[0][$this->_primary_key];
-        }
-    }
-
-    private function getItemStatusId($where = array())
-    {
-        $this->db->flush_cache();
-        foreach ($where as $key => $value) {
-            $this->db->where($key, $value);
-        }
-        $query = $this->db->get('item_status')->result_array();
-        if ($query) {
-            return $query[0]['item_status_id'];
         }
     }
 }
